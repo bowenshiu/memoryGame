@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <style type="text/css">
+    </style>
+    </head>
+    <body>
+                                          <!--style="border:1px solid #000000;"-->
+        <canvas onclick="cardsMatch(event)" id="Canvas" width="300" height="300"></canvas>
+        <canvas id="CanvasGuess0" width="300" height="300" ></canvas>
+        <canvas id="CanvasGuess1" width="300" height="300" ></canvas>
+        <canvas id="CanvasGuess2" width="300" height="300" ></canvas>
+        <script type="text/javascript">
+            var Canvas = document.getElementById("Canvas");
+            var ctx = Canvas.getContext("2d");
+    
+            var frontCardHight=150;
+            var frontCardWidth = 100;
+            var frontCards=
+            [
+             ["A","C","B"],
+             ["B","C","A"]
+            ];
+            // function createFrontCards()
+            // {
+            //     for (var i=0;i<frontCards.length;i++)
+            //     {
+            //         for (var j=0;j<frontCards[i].length;j++)
+            //         {
+            //             drawFrontCards(j, i, frontCards[i][j]);
+            //         }
+            //     }
+            // }
+            
+            function drawFrontCards(FCx,FCy,FCtype)
+            {
+                if (FCtype)
+                {
+                    ctx.strokeStyle='blue';
+                    ctx.strokeRect(frontCardWidth*FCx + 1, frontCardHight*FCy + 1, frontCardWidth - 2, frontCardHight - 2);
+                    ctx.globalCompositeOperation='source-over';
+                }
+                
+                switch (FCtype)
+                {
+                    case "A":
+                        ctx.font = "140px Georgia";
+                        ctx.fillStyle='black';
+                        ctx.textAlign='start';
+                        ctx.fillText("A", frontCardWidth*FCx, frontCardHight*FCy+130);
+                        
+                    break;
+                    case "B":
+                        ctx.font = "140px Georgia";
+                        ctx.fillStyle='black';
+                        ctx.textAlign='start';
+                        ctx.fillText("B", frontCardWidth*FCx, frontCardHight*FCy+130);
+                    break;    
+                    case "C":
+                        ctx.font = "140px Georgia";
+                        ctx.fillStyle='black';
+                        ctx.textAlign='start';
+                        ctx.fillText("C", frontCardWidth*FCx, frontCardHight*FCy+130); 
+                    break;
+                }
+            }
+            
+            // createFrontCards();
+            
+            var backCardHight=150;
+            var backCardWidth=100;
+            var backCards=
+            [
+             [0,0,0],
+             [0,0,0]
+            ];
+            
+            function createBackCards()
+            {
+                for (var i=0;i<backCards.length;i++)
+                {
+                    for (var j=0;j<backCards[i].length;j++)
+                    {
+                        drawBackCards(j, i, backCards[i][j]);
+                    }
+                }
+            }
+            
+            function drawBackCards(BCx,BCy,BCtype)
+            {
+                if (BCtype==0)
+                {
+                    ctx.fillStyle="gray";
+                    ctx.fillRect(backCardWidth*BCx + 1, backCardHight*BCy + 1, backCardWidth - 2, backCardHight - 2);
+                    ctx.globalCompositeOperation='source-over';
+                }
+                if (BCtype==0)
+                {
+                    ctx.strokeRect(backCardWidth*BCx + 1, backCardHight*BCy + 1, backCardWidth - 2, backCardHight - 2);
+                    ctx.globalCompositeOperation='source-over';
+                }
+            }
+            
+            // createBackCards();
+            
+            var mouseX;
+            var mouseY;
+             //click canvas event
+            var guess1="";
+            var guess2="";
+            var canvasClickConut=0;
+            
+            var CanvasGuess0 = document.getElementById("CanvasGuess0");
+            var ctxCanvasGuess0 = CanvasGuess0.getContext("2d");
+            var CanvasGuess2 = document.getElementById("CanvasGuess2");
+            var ctxCanvasGuess2 = CanvasGuess2.getContext("2d");
+            
+            var newCanvasGuess0;
+            var newCanvasGuess1;
+            var newCanvasGuess2;
+            var position1=00;
+            var position2=00;
+            $("#CanvasGuess0").hide();
+            $("#CanvasGuess2").hide();
+            function cardsMatch(event)
+            {
+                canvasClickConut++;
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+                var coords = "mouseX coords: " + mouseX + ", mouseY coords: " + mouseY;
+                document.getElementById("demo").innerHTML = coords;
+                
+                //frontCards[0][0] A
+                if (1 < mouseX && mouseX < 99 && 1 < mouseY && mouseY < 149 && canvasClickConut == 1)
+                {
+                    position1=11;
+                    newCanvasGuess0=document.getElementById("Canvas");
+                    ctxCanvasGuess0.drawImage(newCanvasGuess0,0,0);
+                    drawFrontCards(0,0,frontCards[0][0]);
+                    guess1 = frontCards[0][0];
+                    
+                }
+                if (1 < mouseX && mouseX < 99 && 1 < mouseY && mouseY < 149 && canvasClickConut == 2)
+                {
+                    position2=11;
+                    drawFrontCards(0,0,frontCards[0][0]);
+                    guess2 = frontCards[0][0]; 
+                    newCanvasGuess2=document.getElementById("Canvas");
+                    ctxCanvasGuess2.drawImage(newCanvasGuess2,0,0);
+                    setTimeout(matchRule,100);
+                }
+                
+                //frontCards[0][1] C
+                if (101 < mouseX && mouseX < 199 && 1 < mouseY && mouseY < 149 && canvasClickConut == 1)
+                {
+                   position1=12;
+                    newCanvasGuess0=document.getElementById("Canvas");
+                    ctxCanvasGuess0.drawImage(newCanvasGuess0,0,0);
+                    drawFrontCards(1,0,frontCards[0][1]);
+                    guess1 = frontCards[0][1];
+                }   
+                if (101 < mouseX && mouseX < 199 && 1 < mouseY && mouseY < 149 && canvasClickConut == 2)
+                {
+                    position2=12;
+                    drawFrontCards(1,0,frontCards[0][1]);
+                    guess2 = frontCards[0][1]; 
+                    newCanvasGuess2=document.getElementById("Canvas");
+                    ctxCanvasGuess2.drawImage(newCanvasGuess2,0,0);
+                    setTimeout(matchRule,100);
+                }
+            
+                
+                //frontCards[0][2] B  
+                if (201 < mouseX && mouseX < 299 && 1 < mouseY && mouseY < 149 && canvasClickConut == 1)
+                {
+                    position1=13;
+                    newCanvasGuess0=document.getElementById("Canvas");
+                    ctxCanvasGuess0.drawImage(newCanvasGuess0,0,0);
+                    drawFrontCards(2,0,frontCards[0][2]);
+                    guess1 = frontCards[0][2];
+                }
+                if (201 < mouseX && mouseX < 299 && 1 < mouseY && mouseY < 149 && canvasClickConut == 2)
+                {
+                    position2=13;
+                    drawFrontCards(2,0,frontCards[0][2]);
+                    guess2 = frontCards[0][2];
+                    newCanvasGuess2=document.getElementById("Canvas");
+                    ctxCanvasGuess2.drawImage(newCanvasGuess2,0,0);
+                    setTimeout(matchRule,100);
+                }
+                
+                // frontCards[1][0] B
+                if (1 < mouseX && mouseX < 99 && 151 < mouseY && mouseY < 299 && canvasClickConut == 1)
+                {
+                    position1=21;
+                    newCanvasGuess0=document.getElementById("Canvas");
+                    ctxCanvasGuess0.drawImage(newCanvasGuess0,0,0);
+                    drawFrontCards(0,1,frontCards[1][0]);
+                    guess1 = frontCards[1][0];
+                }
+                if (1 < mouseX && mouseX < 99 && 151 < mouseY && mouseY < 299 && canvasClickConut == 2)
+                {
+                    position2=21;
+                    drawFrontCards(0,1,frontCards[1][0]);
+                    guess2 = frontCards[1][0];
+                    newCanvasGuess2=document.getElementById("Canvas");
+                    ctxCanvasGuess2.drawImage(newCanvasGuess2,0,0);
+                    setTimeout(matchRule,100);
+                }
+
+                //frontCards[1][1] C
+                if (101 < mouseX && mouseX < 199 && 151 < mouseY && mouseY < 299 && canvasClickConut == 1)
+                {
+                    position1=22;
+                    newCanvasGuess0=document.getElementById("Canvas");
+                    ctxCanvasGuess0.drawImage(newCanvasGuess0,0,0);
+                    drawFrontCards(1,1,frontCards[1][1]);
+                    guess1 = frontCards[1][1];
+                }
+                if (101 < mouseX && mouseX < 199 && 151 < mouseY && mouseY < 299 && canvasClickConut == 2)
+                {
+                    position2=22;
+                    drawFrontCards(1,1,frontCards[1][1]);
+                    guess2 = frontCards[1][1];
+                    newCanvasGuess2=document.getElementById("Canvas");
+                    ctxCanvasGuess2.drawImage(newCanvasGuess2,0,0);
+                    setTimeout(matchRule,100);
+                }
+               
+                //frontCards[1][2] A
+                if (201 < mouseX && mouseX < 299 && 151 < mouseY && mouseY < 299 && canvasClickConut == 1)
+                {
+                    position1=23;
+                    newCanvasGuess0=document.getElementById("Canvas");
+                    ctxCanvasGuess0.drawImage(newCanvasGuess0,0,0);
+                    drawFrontCards(2,1,frontCards[1][2]);
+                    guess1 = frontCards[1][2];
+                }
+                if (201 < mouseX && mouseX < 299 && 151 < mouseY && mouseY < 299 && canvasClickConut == 2)
+                {
+                    position2=23;
+                    drawFrontCards(2,1,frontCards[1][2]);
+                    guess2 = frontCards[1][2];
+                    newCanvasGuess2=document.getElementById("Canvas");
+                    ctxCanvasGuess2.drawImage(newCanvasGuess2,0,0);
+                    setTimeout(matchRule,100);
+                }
+                
+               if (score === 30000)
+                {
+                    alert("恭喜過關!^_^" );
+                    window.location.reload();
+                }
+
+            }
+
+            function matchRule()
+            {
+                    if (guess1 == guess2 && position1 != position2)
+                    {
+                        newCanvasGuess2=document.getElementById("CanvasGuess2");
+                        ctx.drawImage(newCanvasGuess2,0,0);
+                        canvasClickConut=0;
+                        guess1="";
+                        guess2="";
+                        position1=00;
+                        position2=00;
+                        score += 10000;
+                        document.getElementById("score").innerHTML = "Score: " + score;
+                    }
+                    else if (guess1 != guess2 && position1 != position2)
+                    {
+                        newCanvasGuess0=document.getElementById("CanvasGuess0");
+                        ctx.drawImage(newCanvasGuess0,0,0);
+                        canvasClickConut=0;
+                        guess1="";
+                        guess2="";
+                        position1=00;
+                        position2=00;
+                    }
+                    else if (guess1 == guess2 && position1 == position2)
+                    {
+                        newCanvasGuess0=document.getElementById("CanvasGuess0");
+                        ctx.drawImage(newCanvasGuess0,0,0);
+                        canvasClickConut=0;
+                        guess1="";
+                        guess2="";
+                        position1=00;
+                        position2=00;
+                    }
+            }
+            
+            var score=0;
+            
+            function startGame()
+            {
+                createBackCards();
+            }
+            
+            startGame();
+            
+        </script>
+         <p id="demo"></p>
+         <p id="score">score: 0</p>
+    </body>
+</html>
